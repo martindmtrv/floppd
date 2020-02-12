@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>Floppd</title>
+    <style>
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<div id="login">
+    <form action="/login" method="post">
+        <ul>
+            <li>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username">
+            </li>
+            <li>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="pw">
+            </li>
+            <li class="button">
+                <button id="submit" type="submit">Login</button>
+            </li>
+        </ul>
+    </form>
+
+    <p>
+        <a href='/register'>Create an account!</a>
+    </p>
+</div>
+
+</html>
