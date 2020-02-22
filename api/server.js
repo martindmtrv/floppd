@@ -91,8 +91,13 @@ app.get('/app', auth.login, (req, res)=>{
     res.sendFile('public/build/index.html', {root: __dirname});
 });
 
+app.get('/auth', auth.login, (req, res)=>{
+    res.status(200).json({msg: 'Authorized'});
+});
+
 // start the server
 db.connect(()=>{
-    app.listen(3000);
-	console.log("Server listening on port 3000");
+    app.listen(8080, ()=>{
+        console.log("Server listening on port 8080");
+    });
 });

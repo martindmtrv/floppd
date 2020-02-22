@@ -9,7 +9,8 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.1"
+    "react-scripts": "3.3.1",
+    "reactstrap": "^8.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -32,6 +33,6 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "localhost:3000/build",
-  "proxy": "http://localhost:3000"
+  "homepage": "http://localhost:8080/build",
+  ".proxy": "http://localhost:8080"
 }
