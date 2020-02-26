@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const User = require('../models/UserModel');
 const Group = require('../models/GroupModel');
 
@@ -6,13 +7,16 @@ const Group = require('../models/GroupModel');
 let router = express.Router();
 
 router.post('/', (req, res) => {
-
     // set defaults
     req.body.admins = [];
     req.body.events = [];
-    req.body.users = [];
+    req.body.users = [];    
 
     let group = new Group(req.body);
+
+    if (req.session.loggedIn){
+        group.admins.push(req.session._id);
+    }
 
     group.save((err) => {
         if (err) {

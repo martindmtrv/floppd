@@ -1,27 +1,25 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Table } from 'reactstrap';
-import { Link, BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Table, Button } from 'reactstrap';
+import { Link, Switch, Route } from 'react-router-dom';
 import Group from '../components/Group';
 
 export default function GroupsPage() {
     const [groups, setGroups] = useState([]);
-    function fetchData(cb) {
-        // sample json response
-        let data = JSON.parse('[{ "_id" : "5e448d353a76fd359fa4817c", "admins" : [ "5e448c7476e84b3589fcebe8" ], "users" : [ "5e448cb456b17c3598c9f68d" ], "name" : "aphas", "events" : [{"name":"Smash"}], "__v" : 2 }]');
 
-        // fake async request
-        cb(data);
+    function fetchData(cb) {
+        fetch(`/api/users/${sessionStorage.getItem('id')}/groups`)
+            .then(res=>res.json()).then(data=>cb(data.groups));
     }
 
-    useEffect(() => {
-        fetchData(data => { setGroups(data) });
-    }, [])
+    useEffect(() => fetchData(data => { setGroups(data) })
+    , [])
 
     return (
         <Switch>
             <Route exact path='/groups'>
                 <h1>Groups Page</h1>
+                <Link to='/group'><Button>New Group</Button></Link>
                 <Table>
                     <thead>
                         <tr>
@@ -38,7 +36,7 @@ export default function GroupsPage() {
                                     <td><Link to={'/groups/' + group._id}>{group.name}</Link></td>
                                     <td>{group.users.length}</td>
                                     <td>{group.admins.length}</td>
-                                    <td>{group.events[0].name}</td>
+                                    <td>{(group.events.length > 0) ? group.events[0].name : "No Upcoming Events!"}</td>
                                 </tr>
                             )
                         })}

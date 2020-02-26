@@ -1,16 +1,14 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { Table, Input, Button } from 'reactstrap';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function Group({match: {params: {gid}}}){
     const [group, setGroup] = useState({admins:[], users:[], events: []});
 
     function fetchData(cb){
-        let data = JSON.parse('{"admins":[{"_id":"5e448c7476e84b3589fcebe8","username":"martin","rating":0}],"users":[{"_id":"5e448cb456b17c3598c9f68d","username":"martin1","rating":0}],"_id":"5e448d353a76fd359fa4817c","name":"aphas","events":[{"name": "smash", "date": 11111111111, "location": "daniel house", "_id": "sample_ting"}],"__v":2}');
-        
-        // fake async request
-        cb(data);
+        fetch(`/api/groups/${gid}`)
+            .then(res=>res.json()).then(data=>cb(data));
     }
 
     useEffect(()=>{
@@ -68,10 +66,11 @@ function Group({match: {params: {gid}}}){
                 </thead>
                 <tbody>
                     {group.events.map(event => {
+                        event.date = new Date(event.date);
                         return (
                             <tr key={event._id}>
                                 <td><Link to={'/events/'+event._id}>{event.name}</Link></td>
-                                <td>{event.date}</td>
+                                <td>{event.date.toDateString()}</td>
                                 <td>{event.location}</td>
                                 <td><Input type='checkbox'/></td>
                             </tr>

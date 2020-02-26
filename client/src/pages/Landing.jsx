@@ -10,14 +10,52 @@ function Landing(){
     const [login, setLogin] = useState( storageVal === null ? 0 : parseInt(storageVal));
 
     function logout(){
-        sessionStorage.setItem('login', 0);
-        setLogin(0);
+        fetch('/logout', {
+            method:'POST'
+        }).then(res=>res.json())
+        .then(data=>{
+            sessionStorage.setItem('login', 0);
+            setLogin(0);
+        });
+        
     }
 
-    function submit(){
-        sessionStorage.setItem('login', 1);
-        setLogin(1);
+    function submit(event){
+
+        event.preventDefault();
+        let formData = {
+            username: document.getElementById('username').value,
+            pw: document.getElementById('pw').value
+        }
+        // do some error checks now TODO
+
+        fetch('/login', {
+            method:'POST',
+            body: JSON.stringify(formData),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        }).then(res=>{
+            if (res.status === 200){
+                return res.json();
+            } else{
+                throw res.json();
+            }
+        }).then(data=>{
+            // maybe return current user id
+            sessionStorage.setItem('login', 1);
+            sessionStorage.setItem('id',data.id);
+            setLogin(1);
+        }).catch(e=>{
+            // do something with this error should change form elements
+            e.then(e=> alert(e.msg));
+        });
+
+
+        
     }
+
+
 
     return (
         <div>
@@ -37,7 +75,7 @@ function Landing(){
                             <Label for="pw">Password</Label>
                             <Input type="password" name="pw" id="pw" placeholder="Password" />
                         </FormGroup>
-                        <Button>Submit</Button>
+                        <Button>Login</Button>
                     </Form>}
                 </Route>
             </BrowserRouter>

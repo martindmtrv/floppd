@@ -4,7 +4,7 @@ const Group = require('../models/GroupModel');
 
 // this router 
 // root is /:gid/events
-let router = express.Router();
+let router = express.Router({mergeParams: true});
 
 router.get('/', (req, res)=>{
     Group.findById(req.params.gid, {events: 1}, (err, events)=>{

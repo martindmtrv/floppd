@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import "./assets/vendor/nucleo/css/nucleo.css";
 import "./assets/vendor/font-awesome/css/font-awesome.min.css";
-import "./assets/css/argon-design-system-react.css";
+import "./assets/scss/argon-design-system-react.scss";
+
 import Landing from './pages/Landing';
 
 ReactDOM.render(<Landing />, document.getElementById('root'));

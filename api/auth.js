@@ -13,7 +13,7 @@ let logout = (req, res, next)=>{
 	if (req.session.loggedIn === undefined || !req.session.loggedIn){
 		next();
 	} else{
-		res.status(400).json({msg:'Already logged in!'});
+		res.status(208).json({msg:'Already logged in!'});
 	}
 };
 

@@ -7,7 +7,7 @@ function App() {
       .then(res=>res.json())
       .then(data=>{
         setPosts(data.data.children.map((post)=> post.data));
-      })
+      });
   });
 
   return (
