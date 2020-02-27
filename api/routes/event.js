@@ -1,6 +1,8 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const Event = require('../models/EventModel');
 const Group = require('../models/GroupModel');
+const User = require('../models/UserModel');
 
 // this router 
 // root is /:gid/events
@@ -55,6 +57,37 @@ router.get('/:eid', (req, res)=>{
             res.status(200).json(event);
         });        
     });
+});
+
+router.put('/:eid/:id', (req, res)=>{
+    Group.findById(req.params.gid, (err, group)=>{
+        if (group == null){
+            res.status(404).json({msg:`Group ${req.params.gid} not found`});
+            return;
+        }
+
+        User.findById(req.params.id, (err, user)=>{
+            if (user === null){
+                res.status(404).json({msg:`User ${req.params.id} is not found`});
+                return;
+            }
+
+            group.getEvent(req.params.eid, (event)=>{
+                if (event === null){
+                    res.status(404).json({msg:`Event ${req.params.eid} is not found`});
+                    return;
+                }
+
+                event.toggleAttendance(user, (going)=>{
+                    // save entire doc
+                    group.save(()=>res.status(200).json({_id:event.id, going:going}));
+                    
+                });
+            })
+
+        });
+
+    })
 });
 
 router.delete('/:eid', (req,res)=>{

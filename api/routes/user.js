@@ -55,7 +55,7 @@ router.get('/:id/events', (req, res)=>{
         }
 
         user.getEvents((events)=>{
-            res.status(200).json({events: events});
+            res.status(200).json(events);
         });
         
     });

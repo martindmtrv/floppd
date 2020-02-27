@@ -34,7 +34,9 @@ UserSchema.methods.getEvents = function(cb){
         }
         let events = [];
 
-        groups.forEach(group => events.push(...group.events));
+        groups.forEach(group => {
+            events.push({_id: group._id, events: group.events});
+        });
         cb(events);
     });
 };

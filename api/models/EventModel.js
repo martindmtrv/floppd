@@ -10,18 +10,18 @@ let EventSchema = Schema({
 });
 
 
-EventSchema.method.toggleAttendance = function(user, cb){
+EventSchema.methods.toggleAttendance = function(user, cb){
     let pos = this.attending.indexOf(user._id);
     if (pos < 0){
         this.attending.push(user._id);    
-        cb(true);
     } else{
         this.attending.splice(pos, 1);
-        cb(false);
     }
+
+    cb(pos < 0);
 };
 
-EventSchema.method.isAttending = function(user, cb){
+EventSchema.methods.isAttending = function(user, cb){
     cb(this.attending.includes(user._id));
 }
 

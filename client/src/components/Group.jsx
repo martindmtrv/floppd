@@ -2,6 +2,8 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Table, Input, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import EventRow from './EventRow';
+import EventsTable from './EventsTable';
 
 function Group({match: {params: {gid}}}){
     const [group, setGroup] = useState({admins:[], users:[], events: []});
@@ -55,31 +57,8 @@ function Group({match: {params: {gid}}}){
                 </tbody>
             </Table>
             <h2>Events</h2>
-            <Table>
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Time</td>
-                        <td>Location</td>
-                        <td>Attending</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {group.events.map(event => {
-                        event.date = new Date(event.date);
-                        return (
-                            <tr key={event._id}>
-                                <td><Link to={'/events/'+event._id}>{event.name}</Link></td>
-                                <td>{event.date.toDateString()}</td>
-                                <td>{event.location}</td>
-                                <td><Input type='checkbox'/></td>
-                            </tr>
-
-                        )
-                    })}
-                </tbody>
-
-            </Table>
+            <EventsTable gid={gid} events={group.events}/>
+ 
         </div>
         
     )

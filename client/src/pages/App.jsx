@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Link, Switch } from 'react-router-dom';
 import GroupsPage from './GroupsPage';
 import EventCreator from './EventCreator';
 import CreateGroup from './CreateGroup';
+import EventsPage from './EventsPage';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
         <Switch>
           <Route path='/groups/:gid/event' component={EventCreator} />
           <Route path='/groups' component={GroupsPage} />
-          <Route path='/events' component={()=><h1>Events</h1>}/>
+          <Route path='/events' component={EventsPage}/>
           <Route path='/group' component={CreateGroup} />
         </Switch>
       </BrowserRouter>
