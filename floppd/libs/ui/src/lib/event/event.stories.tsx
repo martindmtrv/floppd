@@ -1,5 +1,5 @@
 import React from 'react';
-import { Event, EventProps } from './event';
+import { Event, IEventProps } from './event';
 
 export default {
   component: Event,
@@ -8,7 +8,15 @@ export default {
 
 export const primary = () => {
   /* eslint-disable-next-line */
-  const props: EventProps = {};
+  const props: IEventProps = {
+    event: {
+      organizer: 'Martin Dimitrov',
+      date: new Date('2020-09-03T16:30:00.000Z'),
+      location: '23 Northview Road',
+      title: 'Test event',
+      description: 'just for fun',
+    },
+  };
 
-  return <Event />;
+  return <Event {...props} />;
 };

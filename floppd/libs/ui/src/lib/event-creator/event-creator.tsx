@@ -1,7 +1,13 @@
 import React from 'react';
 
-import './event-creator.scss';
-import { Grid, TextField, Button } from '@material-ui/core';
+import './event-creator.css';
+import {
+  Grid,
+  TextField,
+  Button,
+  Typography,
+  Container,
+} from '@material-ui/core';
 
 import {
   MuiPickersUtilsProvider,
@@ -10,6 +16,7 @@ import {
 } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
+import NamePicker from '../name-picker/name-picker';
 
 export interface IEventCreatorProps {
   event?: IEvent;
@@ -32,6 +39,8 @@ export interface IEvent {
   location: string;
   title: string;
   description: string;
+  organizer: string;
+  attending?: string[];
 }
 // TODO: Url parsing for the event maker
 
@@ -43,6 +52,7 @@ export class EventCreator extends React.Component<
     super(props);
     this.state = {
       formValues: {
+        organizer: this.props?.event?.organizer,
         date: this.props?.event?.date ?? null,
         location: this.props?.event?.location,
         title: this.props?.event?.title,
@@ -62,12 +72,13 @@ export class EventCreator extends React.Component<
     this.isValidated(newValues, e?.target?.id || 'date');
     this.setState({ formValues: newValues });
   };
-  // handleDateChange = (d: Date) =>
-  //   this.setState({ formValues: this.state.formValues.date = d });
-  // handleLocationChange = (e) => this.setState({ location: e.target.value });
-  // handleTitleChange = (e) => this.setState({ title: e.target.value });
-  // handleDescriptionChange = (e) =>
-  //   this.setState({ description: e.target.value });
+
+  setName = (name: string) => {
+    const newValues = { ...this.state.formValues };
+    this.state.formValues.attending = [name];
+    newValues.organizer = name;
+    this.setState({ formValues: newValues });
+  };
 
   isValidated = (event: IEvent, field?: string): boolean => {
     const errors: IFormValidation = { ...this.state.validation };
@@ -103,14 +114,24 @@ export class EventCreator extends React.Component<
     console.log(this.state.formValues);
     if (this.isValidated(this.state.formValues)) {
       console.log('push this');
+      console.log(JSON.stringify(this.state.formValues));
     }
   };
 
   render() {
     return (
-      <form>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid container justify="center" alignItems="center">
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        {!this.state.formValues.organizer && (
+          <NamePicker onSubmit={this.setName} />
+        )}
+        <Container>
+          <Grid
+            container
+            justify="space-around"
+            spacing={4}
+            alignItems="center"
+            direction="column"
+          >
             <Grid item>
               <Grid
                 container
@@ -120,10 +141,11 @@ export class EventCreator extends React.Component<
               >
                 <Grid item style={{ width: '100%' }}>
                   <TextField
+                    autoComplete={'off'}
                     type="text"
                     id="title"
                     error={!!this.state.validation?.title}
-                    label="What?"
+                    label="What"
                     onChange={this.handleFieldChange}
                     fullWidth
                   />
@@ -133,7 +155,7 @@ export class EventCreator extends React.Component<
                     value={this.state.formValues.date}
                     error={!!this.state.validation?.date}
                     onChange={this.handleFieldChange}
-                    label="When?"
+                    label="When"
                     disablePast
                     format="dd/MM/yyyy hh:mm a"
                   />
@@ -143,8 +165,9 @@ export class EventCreator extends React.Component<
                   <TextField
                     type="text"
                     id="location"
+                    autoComplete={'address-line1'}
                     error={!!this.state.validation?.location}
-                    label="Where?"
+                    label="Where"
                     value={this.state.formValues.location}
                     onChange={this.handleFieldChange}
                     fullWidth
@@ -153,9 +176,11 @@ export class EventCreator extends React.Component<
                 <Grid item style={{ width: '100%' }}>
                   <TextField
                     multiline
+                    className={'why-input'}
+                    style={{ maxHeight: 100, overflowY: 'scroll' }}
                     id="description"
                     type="text"
-                    label="Why?"
+                    label="Why"
                     error={!!this.state.validation?.description}
                     value={this.state.formValues.description}
                     onChange={this.handleFieldChange}
@@ -168,8 +193,8 @@ export class EventCreator extends React.Component<
               </Grid>
             </Grid>
           </Grid>
-        </MuiPickersUtilsProvider>
-      </form>
+        </Container>
+      </MuiPickersUtilsProvider>
     );
   }
 }
