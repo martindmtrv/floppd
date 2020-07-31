@@ -1,4 +1,5 @@
 {
   "presets": ["@nrwl/web/babel"],
-  "babelrcRoots": ["*"]
+  "babelrcRoots": ["*"],
+  "plugins": ["transform-class-properties"]
 }
