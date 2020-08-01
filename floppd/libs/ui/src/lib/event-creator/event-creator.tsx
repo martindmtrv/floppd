@@ -41,6 +41,7 @@ export interface IEvent {
   description: string;
   organizer: string;
   attending?: string[];
+  flopping?: string[];
 }
 // TODO: Url parsing for the event maker
 
@@ -75,7 +76,8 @@ export class EventCreator extends React.Component<
 
   setName = (name: string) => {
     const newValues = { ...this.state.formValues };
-    this.state.formValues.attending = [name];
+    newValues.attending = [name];
+    newValues.flopping = [];
     newValues.organizer = name;
     this.setState({ formValues: newValues });
   };

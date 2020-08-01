@@ -1,13 +1,29 @@
 import React from 'react';
 
-import { Container, Typography, Grid, Paper } from '@material-ui/core';
+import {
+  Container,
+  Typography,
+  Grid,
+  Paper,
+  createMuiTheme,
+  ThemeProvider,
+} from '@material-ui/core';
 
 import Confetti from '../../../assets/Confetti-4s-1920px.svg';
+import ConfettiDark from '../../../assets/Confetti-dark-4s-1920px.svg';
 
 import './page.scss';
 
 /* eslint-disable-next-line */
-export interface IPageProps {}
+export interface IPageProps {
+  darkMode?: boolean;
+}
+
+const darkTheme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 export class Page extends React.Component<IPageProps, {}> {
   render() {
@@ -17,26 +33,32 @@ export class Page extends React.Component<IPageProps, {}> {
     )?.map?.((child) => <Grid item>{child}</Grid>);
 
     return (
-      <div
-        style={{
-          background: `url(${Confetti}) center/cover`,
-          width: '98vw',
-          height: '98vh',
-        }}
-      >
-        <Grid
-          container
-          justify="space-around"
-          spacing={4}
-          alignItems="center"
-          direction="column"
+      <ThemeProvider theme={this.props.darkMode ? darkTheme : undefined}>
+        <div
+          style={{
+            background: `url(${
+              this.props.darkMode ? ConfettiDark : Confetti
+            }) center/cover`,
+            width: '98vw',
+            minHeight: '98vh',
+          }}
         >
-          <Grid item>
-            <Typography variant="h4">floppd</Typography>
+          <Grid
+            container
+            justify="space-around"
+            spacing={4}
+            alignItems="center"
+            direction="column"
+          >
+            <Grid item>
+              <Paper style={{ boxShadow: 'unset', backgroundColor: 'unset' }}>
+                <Typography variant="h4">floppd</Typography>
+              </Paper>
+            </Grid>
+            {children}
           </Grid>
-          {children}
-        </Grid>
-      </div>
+        </div>
+      </ThemeProvider>
     );
   }
 }
