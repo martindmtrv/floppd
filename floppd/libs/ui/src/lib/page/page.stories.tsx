@@ -15,17 +15,17 @@ export const empty = () => {
   /* eslint-disable-next-line */
   const props: IPageProps = {};
 
-  return <Page darkMode={boolean('Dark mode', false)} />;
+  return <Page darkMode={boolean('Dark mode', true)} />;
 };
 
 export const withEventCreator = () => (
-  <Page darkMode={boolean('Dark mode', false)}>
+  <Page darkMode={boolean('Dark mode', true)}>
     <EventCreator />
   </Page>
 );
 
 export const eventPage = () => (
-  <Page darkMode={boolean('Dark mode', false)}>
+  <Page darkMode={boolean('Dark mode', true)}>
     <Event
       event={TestEvent}
       onSubmit={(b) => console.log(b ? 'Going' : 'flopping')}

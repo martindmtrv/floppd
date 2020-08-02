@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Container,
+  Paper,
 } from '@material-ui/core';
 
 import {
@@ -20,6 +21,8 @@ import NamePicker from '../name-picker/name-picker';
 
 export interface IEventCreatorProps {
   event?: IEvent;
+  organizer?: string;
+  onSubmit?: (e: IEvent) => void;
 }
 
 export interface IEventCreatorState {
@@ -53,11 +56,13 @@ export class EventCreator extends React.Component<
     super(props);
     this.state = {
       formValues: {
-        organizer: this.props?.event?.organizer,
+        organizer: this.props.organizer || this.props?.event?.organizer,
         date: this.props?.event?.date ?? null,
         location: this.props?.event?.location,
         title: this.props?.event?.title,
         description: this.props?.event?.description,
+        flopping: [],
+        attending: [this.props.organizer || this.props?.event?.organizer],
       },
       validation: {},
     };
@@ -76,8 +81,6 @@ export class EventCreator extends React.Component<
 
   setName = (name: string) => {
     const newValues = { ...this.state.formValues };
-    newValues.attending = [name];
-    newValues.flopping = [];
     newValues.organizer = name;
     this.setState({ formValues: newValues });
   };
@@ -113,10 +116,8 @@ export class EventCreator extends React.Component<
   };
 
   onSubmit = () => {
-    console.log(this.state.formValues);
     if (this.isValidated(this.state.formValues)) {
-      console.log('push this');
-      console.log(JSON.stringify(this.state.formValues));
+      this.props.onSubmit?.(this.state.formValues);
     }
   };
 
@@ -126,13 +127,14 @@ export class EventCreator extends React.Component<
         {!this.state.formValues.organizer && (
           <NamePicker onSubmit={this.setName} />
         )}
-        <Container>
+        <Paper>
           <Grid
             container
             justify="space-around"
             spacing={4}
             alignItems="center"
             direction="column"
+            style={{ minWidth: 500 }}
           >
             <Grid item>
               <Grid
@@ -195,7 +197,7 @@ export class EventCreator extends React.Component<
               </Grid>
             </Grid>
           </Grid>
-        </Container>
+        </Paper>
       </MuiPickersUtilsProvider>
     );
   }

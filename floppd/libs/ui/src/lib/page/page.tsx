@@ -30,7 +30,11 @@ export class Page extends React.Component<IPageProps, {}> {
     const children = (Array.isArray(this.props?.children)
       ? (this.props.children as React.ReactNode[])
       : [this.props.children]
-    )?.map?.((child) => <Grid item>{child}</Grid>);
+    )?.map?.((child, index) => (
+      <Grid item key={index}>
+        {child}
+      </Grid>
+    ));
 
     return (
       <ThemeProvider theme={this.props.darkMode ? darkTheme : undefined}>
@@ -39,8 +43,7 @@ export class Page extends React.Component<IPageProps, {}> {
             background: `url(${
               this.props.darkMode ? ConfettiDark : Confetti
             }) center/cover`,
-            width: '98vw',
-            minHeight: '98vh',
+            height: '100%',
           }}
         >
           <Grid
@@ -49,6 +52,7 @@ export class Page extends React.Component<IPageProps, {}> {
             spacing={4}
             alignItems="center"
             direction="column"
+            style={{ margin: 0, width: '100%' }}
           >
             <Grid item>
               <Paper style={{ boxShadow: 'unset', backgroundColor: 'unset' }}>

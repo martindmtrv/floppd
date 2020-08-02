@@ -9,7 +9,9 @@ import {
   DialogActions,
   Button,
   DialogContentText,
+  IconButton,
 } from '@material-ui/core';
+import { SettingsBrightness } from '@material-ui/icons';
 
 /* eslint-disable-next-line */
 export interface INamePickerProps {
@@ -71,6 +73,9 @@ export class NamePicker extends React.Component<
           />
         </DialogContent>
         <DialogActions>
+          <IconButton>
+            <SettingsBrightness />
+          </IconButton>
           <Button onClick={this.onSubmit} color="primary">
             Continue
           </Button>

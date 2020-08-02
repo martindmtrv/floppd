@@ -33,11 +33,15 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "connect-mongodb-session": "^2.3.3",
     "date-fns": "^2.15.0",
     "document-register-element": "1.13.1",
     "express": "4.17.1",
+    "express-session": "^1.17.1",
+    "mongoose": "^5.9.27",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.9.6",
