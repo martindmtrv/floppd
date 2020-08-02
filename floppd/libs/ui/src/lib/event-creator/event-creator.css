@@ -1,0 +1,10 @@
+.why-input {
+  max-height: 100px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.why-input::-webkit-scrollbar {
+  display: none;
+}

@@ -1,16 +1,85 @@
-import * as express from 'express';
-import { Message } from '@floppd/api-interfaces';
+const express = require('express');
+const session = require('express-session');
+const MongoDBStore = require('connect-mongodb-session')(session);
+
+import Event from './models/EventModel';
+
+import db from './app/db';
 
 const app = express();
 
-const greeting: Message = { message: 'Welcome to api!' };
+app.use(express.json());
 
-app.get('/api', (req, res) => {
-  res.send(greeting);
-});
+app.use(
+  session({
+    secret: 'super duper secret',
+    store: new MongoDBStore({
+      connectionOptions: { useUnifiedTopology: true },
+      uri:
+        'mongodb+srv://martin:Mongomongo123@floppd-bg2yz.azure.mongodb.net/tokens?retryWrites=true&w=majority',
+      collection: 'sessiondata',
+    }),
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log('Listening at http://localhost:' + port + '/api');
+db.connect(() => {
+  const server = app.listen(port, () => {
+    console.log('Listening at http://localhost:' + port + '/api');
+  });
+
+  server.on('error', console.error);
 });
-server.on('error', console.error);
+
+app.post('/api/event', (req, res) => {
+  let event = req.body;
+  if (!req.session.name) {
+    res.status(401).json({ msg: 'Who are you' });
+    return;
+  }
+  event.hasAnswered = [req.session.id];
+  event = new Event(req.body);
+
+  event.save((err) => {
+    if (err) {
+      res.status(400).json({ msg: err.message });
+      return;
+    }
+    res.status(200).json(event);
+  });
+});
+
+app.get('/api/who', (req, res) => {
+  if (req.session.name) {
+    res.status(200).json({
+      name: req.session.name,
+      darkMode: req.session.darkMode,
+    });
+  } else {
+    res.status(404).json({ msg: 'No user associated yet' });
+  }
+});
+
+app.post('/api/who', (req, res) => {
+  if (req.body.name && req.body.name != '') {
+    req.session.name = req.body.name;
+    req.session.darkMode = req.body.darkMode || false;
+    res
+      .status(200)
+      .json({ name: req.session.name, darkMode: req.session.darkMode });
+  } else {
+    res.status(400).json({ msg: 'Bad name' });
+  }
+});
+
+app.get('/api/event/:id', (req, res) => {
+  Event.findById(req.params.id, (err, event) => {
+    if (err || event === null) {
+      res.status(404).json({ msg: `Event ${req.params.id} is not found` });
+      return;
+    }
+    res.status(200).json(event);
+  });
+});

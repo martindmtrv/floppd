@@ -1,3 +1,20 @@
-export interface Message {
-  message: string;
+export interface IEvent {
+  date: Date;
+  location: string;
+  title: string;
+  description: string;
+  organizer: string;
+  attending: string[];
+  flopping: string[];
+  __v: number;
+  _id: string;
+}
+
+export interface Error {
+  msg: string;
+}
+
+export interface UserProfile {
+  name: string;
+  darkMode: boolean;
 }

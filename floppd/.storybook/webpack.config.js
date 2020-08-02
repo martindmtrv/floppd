@@ -6,6 +6,8 @@ module.exports = async ({ config, mode }) => {
 
   // Make whatever fine-grained changes you need
 
+  config.mode = 'development';
+
   // Return the altered config
   return config;
 };

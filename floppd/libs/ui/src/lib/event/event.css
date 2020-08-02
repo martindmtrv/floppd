@@ -1,0 +1,12 @@
+.event {
+  max-height: 80vh;
+  min-height: 425px;
+  padding: 16px;
+  overflow-y: scroll;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.event::-webkit-scrollbar {
+  display: none;
+}
