@@ -35,7 +35,8 @@ router.get('/:gid', (req, res) => {
         }
 
         // add some populator here!
-        group.populate('admins users', 'username rating', (err, group) => {
+        group.populate('admins users', 'username rating')
+        .populate('events', (err, group) => {
             res.status(200).json(group);
         });
     });

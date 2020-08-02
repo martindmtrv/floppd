@@ -2,7 +2,7 @@ import React from 'react';
 import {Table} from 'reactstrap';
 import EventRow from './EventRow';
 
-export default function EventsTable({ groups, events, gid }) {
+export default function EventsTable({ groups, events, gid, handleUpdate }) {
     return (
         <Table>
             <thead>
@@ -18,12 +18,12 @@ export default function EventsTable({ groups, events, gid }) {
                 {(gid === undefined) ? groups.map(group => {
                     return group.events.map(event=>{
                             event.date = new Date(event.date);
-                            return <tr key={event._id}><EventRow event={event} gid={group._id} /></tr>
+                            return <tr key={event._id}><EventRow event={event} gid={group._id} handleUpdate={handleUpdate} /></tr>
                         })    
                     }).flat() :
                     events.map(event => {
                         event.date = new Date(event.date);
-                        return <tr key={event._id}><EventRow event={event} gid={gid} /></tr>
+                        return <tr key={event._id}><EventRow event={event} gid={gid} handleUpdate={handleUpdate} /></tr>
                     })
                 }
             </tbody>

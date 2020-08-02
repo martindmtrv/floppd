@@ -31,7 +31,7 @@ function EventCreator({match: {params: {gid}}}) {
     }
     return (
         (createdId) ? <Redirect to={`/events/${createdId}`} /> :
-        <Form onSubmit={submit}>
+        <Form autoComplete='off' onSubmit={submit}>
             <FormGroup>
                 <Input name="name" id="name" placeholder="Name" />
                 <Input name="location" id="location" placeholder="Location" />

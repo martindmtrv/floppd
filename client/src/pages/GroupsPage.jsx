@@ -4,7 +4,7 @@ import { Table, Button } from 'reactstrap';
 import { Link, Switch, Route } from 'react-router-dom';
 import Group from '../components/Group';
 
-export default function GroupsPage() {
+export default function GroupsPage({handleUpdate}) {
     const [groups, setGroups] = useState([]);
 
     function fetchData(cb) {
@@ -13,10 +13,11 @@ export default function GroupsPage() {
     }
 
     useEffect(() => fetchData(data => { setGroups(data) })
-    , [])
+    , []);
+
 
     return (
-        <Switch>
+        <>
             <Route exact path='/groups'>
                 <h1>Groups Page</h1>
                 <Link to='/group'><Button>New Group</Button></Link>
@@ -26,7 +27,6 @@ export default function GroupsPage() {
                             <td>Group Name</td>
                             <td># of users</td>
                             <td># of admins</td>
-                            <td>Latest Event</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +36,6 @@ export default function GroupsPage() {
                                     <td><Link to={'/groups/' + group._id}>{group.name}</Link></td>
                                     <td>{group.users.length}</td>
                                     <td>{group.admins.length}</td>
-                                    <td>{(group.events.length > 0) ? group.events[0].name : "No Upcoming Events!"}</td>
                                 </tr>
                             )
                         })}
@@ -44,7 +43,7 @@ export default function GroupsPage() {
                 </Table>
             </Route>
 
-            <Route exact path='/groups/:gid' component={Group} />
-        </Switch>
+            <Route exact path='/groups/:gid' render={(props)=><Group {...props} handleUpdate={handleUpdate}/>} />
+        </>
     )
 }

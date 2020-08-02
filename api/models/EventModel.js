@@ -13,12 +13,19 @@ let EventSchema = Schema({
 EventSchema.methods.toggleAttendance = function(user, cb){
     let pos = this.attending.indexOf(user._id);
     if (pos < 0){
-        this.attending.push(user._id);    
+        this.attending.push(user._id);
+        user.rating+=2;
     } else{
         this.attending.splice(pos, 1);
+        user.rating-=2;
     }
 
-    cb(pos < 0);
+
+    this.save((err)=>{
+        user.save({validateBeforeSave: false}, (err, doc)=>{
+            cb(pos < 0);
+        }); 
+    });  
 };
 
 EventSchema.methods.isAttending = function(user, cb){

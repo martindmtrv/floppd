@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import EventsTable from '../components/EventsTable';
+import { Switch, Route } from 'react-router-dom';
+import Event from '../components/Event';
 
-export default function EventsPage(){
+export default function EventsPage({handleUpdate}){
     const [groupedEvents, setGroupedEvents] = useState([]);
 
     useEffect(()=>{
@@ -11,7 +13,10 @@ export default function EventsPage(){
     }, []);
 
     return(
-        <EventsTable groups={groupedEvents} />
+        <>
+            <Route exact path="/events" render={(props)=><EventsTable {...props} groups={groupedEvents} handleUpdate={handleUpdate} />}/>
+            <Route exact path="/events/:eid" render={(props)=><Event {...props}/>} />
+        </>
 
     );
 }

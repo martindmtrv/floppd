@@ -7,7 +7,7 @@ let GroupSchema = Schema({
     name: {type: String, required: true, minlength:1, maxlength: 20},
     admins: [{type: mongoose.Types.ObjectId, ref: 'User'}],
     users: [{type: mongoose.Types.ObjectId, ref: 'User'}],
-    events: [mongoose.model('Event').schema]
+    events: [{type: mongoose.Types.ObjectId, ref:'Event'}]
 });
 
 // takes an id string and checks if the user is in the specifed group 
@@ -49,28 +49,52 @@ GroupSchema.methods.isInGroup = function(id, cb){
 };
 
 GroupSchema.methods.getEvent = function(eid, cb){
-    let event = null;
+    this.populate('events', (err, group)=>{
+        let event = null;
 
-    this.events.some((item)=>{
-        if (eid === item._id.toString()){
-            event = item;
-            return true;
-        }
-    });
-    cb(event);
+        group.events.some((item)=>{
+            if (eid === item._id.toString()){
+                event = item;
+                return true;
+            }
+        });
+        cb(event);
+    })
+    
 };
 
 GroupSchema.methods.removeEvent = function(eid, cb){
     let event = null;
 
     this.events.some((item, index)=>{
-        if (eid === item._id.toString()){
+        if (eid === item){
             event = this.events.splice(index, 1);
             return true;
         }
     });
 
-    cb(event);
+    this.save((err)=>{
+        cb(event);
+    });
 }
+
+GroupSchema.methods.newEvent = function(eid, cb){
+    // on new event all users in this group are deducted 1 rating
+    // once they decide to attend the event, their score is increased by 2
+
+    this.populate('users admins', 'rating', (err, group)=>{
+        Promise.all([...group.users.map(user=>{
+            --user.rating;
+            return user.save();
+        }), ...group.admins.map(admin=>{
+            --admin.rating;
+            return admin.save();
+        })]).then(users=>{
+            this.events.push(eid);
+            this.save(err=>cb(err));
+        })
+    });
+
+};
 
 module.exports = mongoose.model("Group", GroupSchema);

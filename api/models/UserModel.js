@@ -3,6 +3,7 @@ const db = require('../db');
 const Group = require('./GroupModel');
 const Schema = mongoose.Schema;
 
+
 let UserSchema = Schema({
     rating: Number,
     username: {type: String, required: true, minlength: 4, maxlength: 20,
@@ -32,12 +33,17 @@ UserSchema.methods.getEvents = function(cb){
             cb([]);
             return;
         }
+
+        let groupPromises = [];
         let events = [];
 
         groups.forEach(group => {
-            events.push({_id: group._id, events: group.events});
+            groupPromises.push(group.populate('events').execPopulate().then(group=>events.push({_id: group._id, events: group.events})));
         });
-        cb(events);
+
+        Promise.all(groupPromises).then(()=>{
+            cb(events);
+        });
     });
 };
 

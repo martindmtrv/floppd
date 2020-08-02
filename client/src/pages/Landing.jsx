@@ -50,23 +50,19 @@ function Landing(){
             // do something with this error should change form elements
             e.then(e=> alert(e.msg));
         });
-
-
         
     }
 
-
-
     return (
         <div>
-            <h3>Landing Wrapper</h3>
+            <h1>Floppd</h1>
             {(login) ? <Button onClick={logout}>Log me out!</Button> : <></>}
             
             <BrowserRouter>
                 <PrivateRoute path='/' component={App}/>
                 <Route path='/login'>
                         {(login) ? (<Redirect to='/'/>) : 
-                    <Form onSubmit={submit}>
+                    <Form autoComplete='off' onSubmit={submit}>
                         <FormGroup>
                             <Label for="username">Username</Label>
                             <Input type="text" name="username" id="username" placeholder="Username" />

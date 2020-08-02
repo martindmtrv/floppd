@@ -1,11 +1,11 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Table, Input, Button } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import EventRow from './EventRow';
 import EventsTable from './EventsTable';
+import UserTable from './UserTable';
 
-function Group({match: {params: {gid}}}){
+function Group({match: {params: {gid}}, handleUpdate}){
     const [group, setGroup] = useState({admins:[], users:[], events: []});
 
     function fetchData(cb){
@@ -25,39 +25,10 @@ function Group({match: {params: {gid}}}){
             
 
             <h2>Members</h2>
-
-            <Table>
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Rating</td>
-                        <td>Permission</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {group.admins.map(admin =>{
-                        return (
-                            <tr key={admin._id}>
-                                <td><Link to={'/users/'+admin._id}>{admin.username}</Link></td>
-                                <td>{admin.rating}</td>
-                                <td>Admin</td>
-                            </tr>
-                        )
-                    })}
-                    {group.users.map(user =>{
-                        return (
-                            <tr key={user._id}>
-                                <td><Link to={'/users/'+user._id}>{user.username}</Link></td>
-                                <td>{user.rating}</td>
-                                <td>User</td>
-                            </tr>
-                        )
-                    })
-                    }
-                </tbody>
-            </Table>
+            <UserTable group={group} />
+            
             <h2>Events</h2>
-            <EventsTable gid={gid} events={group.events}/>
+            <EventsTable gid={gid} events={group.events} handleUpdate={handleUpdate}/>
  
         </div>
         

@@ -27,7 +27,7 @@ export default function CreateGroup(){
         (createdId) ? <Redirect to={`/groups/${createdId}`}/> : 
         <div>
             <h1>Create a New Group</h1>
-            <Form onSubmit={submit}>
+            <Form autoComplete='off' onSubmit={submit}>
                 <Input id='name' name="name" placeholder="Group Name" />
                 <Button>Create Group</Button>
             </Form>

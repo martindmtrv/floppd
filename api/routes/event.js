@@ -21,24 +21,34 @@ router.get('/', (req, res)=>{
 
 router.post('/', (req, res)=>{
     // create the new event
-    let event = new Event(req.body);
+    let event = new Event({
+        ...req.body, 
+        _id: new mongoose.Types.ObjectId()
+    });
 
-    Group.findById(req.params.gid, (err, group)=>{
-        if (group == null){
-            res.status(404).json({msg:`Group ${req.params.id} not found`});
-            return;
+    event.save((err, event)=>{
+        if (err){
+            res.status(400).json({msg:err.msg});
         }
-        // add new event to this group schema
-        group.events.push(event);
-        group.save((err)=>{
-            if (err){
-                res.status(400).json({msg: err.message});
+
+        Group.findById(req.params.gid, (err, group)=>{
+            if (group == null){
+                res.status(404).json({msg:`Group ${req.params.id} not found`});
                 return;
             }
-            res.status(200).json(event);
+
+            group.newEvent(event._id, (err)=>{
+                if (err){
+                    res.status(400).json({msg: err.message});
+                    return;
+                }
+                res.status(200).json(event);
+                
+            });            
         });
-        
     });
+
+    
 });
 
 router.get('/:eid', (req, res)=>{
@@ -54,7 +64,7 @@ router.get('/:eid', (req, res)=>{
                 res.status(404).json({msg:`Event ${req.params.eid} is not found`});
                 return;
             }
-            res.status(200).json(event);
+            event.populate('attending', 'username rating').execPopulate().then(event=>res.status(200).json(event))
         });        
     });
 });
@@ -97,16 +107,12 @@ router.delete('/:eid', (req,res)=>{
             return;
         }
 
-
         group.removeEvent(req.params.eid, (event)=>{
             if (event === null){
                 res.status(404).json({msg:`Event ${req.params.eid} is not found`});
                 return;
             }
-
-            group.save((err)=>{
-                res.status(200).json({msg:`Event ${req.params.eid} was deleted`});
-            });
+            res.status(200).json({msg:`Event ${req.params.eid} was deleted`});
         });  
     });
 });
