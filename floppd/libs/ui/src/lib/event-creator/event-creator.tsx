@@ -21,7 +21,7 @@ import NamePicker from '../name-picker/name-picker';
 
 export interface IEventCreatorProps {
   event?: IEvent;
-  organizer?: string;
+  organizer: string;
   onSubmit?: (e: IEvent) => void;
 }
 
@@ -56,13 +56,13 @@ export class EventCreator extends React.Component<
     super(props);
     this.state = {
       formValues: {
-        organizer: this.props.organizer || this.props?.event?.organizer,
+        organizer: this.props.organizer,
         date: this.props?.event?.date ?? null,
         location: this.props?.event?.location,
         title: this.props?.event?.title,
         description: this.props?.event?.description,
         flopping: [],
-        attending: [this.props.organizer || this.props?.event?.organizer],
+        attending: [this.props.organizer],
       },
       validation: {},
     };
@@ -76,12 +76,6 @@ export class EventCreator extends React.Component<
       newValues[e.target.id] = e.target.value;
     }
     this.isValidated(newValues, e?.target?.id || 'date');
-    this.setState({ formValues: newValues });
-  };
-
-  setName = (name: string) => {
-    const newValues = { ...this.state.formValues };
-    newValues.organizer = name;
     this.setState({ formValues: newValues });
   };
 
@@ -124,9 +118,6 @@ export class EventCreator extends React.Component<
   render() {
     return (
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        {!this.state.formValues.organizer && (
-          <NamePicker onSubmit={this.setName} />
-        )}
         <Paper>
           <Grid
             container

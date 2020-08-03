@@ -26,6 +26,7 @@ import {
   CalendarToday,
   LocationCity,
   ShortText,
+  AccessTime,
 } from '@material-ui/icons';
 
 /* eslint-disable-next-line */
@@ -93,6 +94,14 @@ export class Event extends React.Component<IEventProps, IEventState> {
                     <CalendarToday />
                   </ListItemIcon>
                   <ListItemText primary={date.toDateString()} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTime />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={date.toLocaleTimeString().replace(':00 ', ' ')}
+                  />
                 </ListItem>
                 <ListItem
                   button
