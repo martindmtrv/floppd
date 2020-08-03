@@ -1,26 +1,23 @@
 import React from 'react';
-
-import { useParams } from 'react-router-dom';
-
-import { Event, IEvent, ErrorComponent } from '@floppd/ui';
-import { Error } from '@floppd/api-interfaces';
+import { Event, ErrorComponent, IEvent } from '@floppd/ui';
+import { Error, IEventApi } from '@floppd/api-interfaces';
 import { api } from './api';
 
 export class EventWrapper extends React.Component<
   {
     match: { params: { id: string } };
   },
-  { event: IEvent | Error }
+  { event: IEventApi | Error }
 > {
   constructor(props) {
     super(props);
     this.state = {
-      event: null,
+      event: undefined,
     };
   }
 
-  getEvent = (id: string): Promise<IEvent> =>
-    api<IEvent>(`/api/event/${id}`, 'GET');
+  getEvent = (id: string): Promise<IEventApi> =>
+    api<IEventApi>(`/api/event/${id}`, 'GET');
 
   componentDidMount() {
     const {
@@ -35,12 +32,19 @@ export class EventWrapper extends React.Component<
   }
 
   render() {
-    return this.state.event && 'msg' in this.state.event ? (
-      <ErrorComponent msg={this.state.event.msg} />
+    const isError: boolean = this.state.event && 'msg' in this.state.event;
+    const responded: boolean =
+      !isError &&
+      (this.state.event as IEventApi)?.hasAnswered.includes(
+        localStorage.getItem('user')
+      );
+    return isError ? (
+      <ErrorComponent msg={(this.state.event as Error).msg} />
     ) : (
       <Event
-        event={(this.state.event as unknown) as IEvent}
+        event={this.state.event as IEvent}
         onSubmit={(b: boolean) => null}
+        responded={responded}
       />
     );
   }

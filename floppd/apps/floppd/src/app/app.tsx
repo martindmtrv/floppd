@@ -1,9 +1,9 @@
 import React from 'react';
-import { Page, EventCreator, Event, NamePicker } from '@floppd/ui';
+import { Page, EventCreator, Event, NamePicker, IEvent } from '@floppd/ui';
 
 import './app.css';
 
-import { IEvent, UserProfile } from '@floppd/api-interfaces';
+import { IEventApi, UserProfile } from '@floppd/api-interfaces';
 
 import { BrowserRouter, Switch, Route, useParams } from 'react-router-dom';
 import { EventWrapper } from './EventWrapper';
@@ -19,22 +19,33 @@ export class App extends React.Component<{}, { user: UserProfile }> {
 
   componentDidMount() {
     api<UserProfile>('/api/who', 'GET').then((res) => {
+      // TODO: handle error
       if (!('msg' in res)) {
         this.setState({ user: res });
+        this.name = res.name;
       }
     });
   }
 
   createEvent = (e: IEvent) => {
-    api<IEvent>('/api/event', 'POST', e).then((res) =>
+    api<IEvent>('/api/event', 'POST', e).then((res: IEventApi) =>
       window.location.replace(`/event/${res._id}`)
     );
   };
 
+  get name(): string {
+    return localStorage.getItem('user') || '';
+  }
+
+  set name(n: string) {
+    localStorage.setItem('user', n);
+  }
+
   createUser = (u: UserProfile) => {
-    api<UserProfile>('/api/who', 'POST', u).then((res) =>
-      this.setState({ user: res })
-    );
+    api<UserProfile>('/api/who', 'POST', u).then((res) => {
+      this.setState({ user: res });
+      this.name = res.name;
+    });
   };
 
   render() {

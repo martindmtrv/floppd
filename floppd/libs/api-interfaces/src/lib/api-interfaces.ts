@@ -1,9 +1,10 @@
-export interface IEvent {
+export interface IEventApi {
   date: Date;
   location: string;
   title: string;
   description: string;
   organizer: string;
+  hasAnswered: string[];
   attending: string[];
   flopping: string[];
   __v: number;
