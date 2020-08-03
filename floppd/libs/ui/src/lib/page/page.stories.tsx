@@ -1,10 +1,10 @@
 import React from 'react';
 import { Page, IPageProps } from './page';
 import EventCreator from '../event-creator/event-creator';
-import { TestEvent } from '../event/event.stories';
 import { Event } from '../event/event';
 
 import { boolean } from '@storybook/addon-knobs';
+import { TestEvent } from '../event/TestEvent';
 
 export default {
   component: Page,
@@ -20,7 +20,7 @@ export const empty = () => {
 
 export const withEventCreator = () => (
   <Page darkMode={boolean('Dark mode', true)}>
-    <EventCreator />
+    <EventCreator organizer="Martin" />
   </Page>
 );
 

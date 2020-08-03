@@ -13,6 +13,7 @@ import Confetti from '../../../assets/Confetti-4s-1920px.svg';
 import ConfettiDark from '../../../assets/Confetti-dark-4s-1920px.svg';
 
 import './page.scss';
+import DarkmodeTrigger from '../darkmode-trigger/darkmode-trigger';
 
 /* eslint-disable-next-line */
 export interface IPageProps {
@@ -46,6 +47,10 @@ export class Page extends React.Component<IPageProps, {}> {
             height: '100%',
           }}
         >
+          <DarkmodeTrigger
+            darkMode={this.props.darkMode}
+            onChange={(b: boolean) => null}
+          />
           <Grid
             container
             justify="space-around"
