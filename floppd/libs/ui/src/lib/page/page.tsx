@@ -18,16 +18,16 @@ import DarkmodeTrigger from '../darkmode-trigger/darkmode-trigger';
 /* eslint-disable-next-line */
 export interface IPageProps {
   darkMode?: boolean;
+  toggleDark: (b: boolean) => void;
 }
-
-const darkTheme = createMuiTheme({
-  palette: {
-    type: 'dark',
-  },
-});
 
 export class Page extends React.Component<IPageProps, {}> {
   render() {
+    const theme = createMuiTheme({
+      palette: {
+        type: this.props.darkMode ? 'dark' : 'light',
+      },
+    });
     const children = (Array.isArray(this.props?.children)
       ? (this.props.children as React.ReactNode[])
       : [this.props.children]
@@ -38,7 +38,7 @@ export class Page extends React.Component<IPageProps, {}> {
     ));
 
     return (
-      <ThemeProvider theme={this.props.darkMode ? darkTheme : undefined}>
+      <ThemeProvider theme={theme}>
         <div
           style={{
             background: `url(${
@@ -49,7 +49,10 @@ export class Page extends React.Component<IPageProps, {}> {
         >
           <DarkmodeTrigger
             darkMode={this.props.darkMode}
-            onChange={(b: boolean) => null}
+            onChange={(b: boolean) => {
+              this.props.toggleDark(b);
+              this.forceUpdate();
+            }}
           />
           <Grid
             container

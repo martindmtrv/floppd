@@ -48,13 +48,20 @@ export class App extends React.Component<{}, { user: UserProfile }> {
     });
   };
 
+  toggleDark = (b: boolean) => {
+    api<UserProfile>('/api/who/dark', 'POST', {
+      name: this.name,
+      darkMode: b,
+    }).then((res) => this.setState({ user: res }));
+  };
+
   render() {
     return (
-      <Page darkMode={this.state.user?.darkMode}>
+      <Page darkMode={this.state.user?.darkMode} toggleDark={this.toggleDark}>
         {!this.state.user ? (
           <NamePicker
             onSubmit={(n: string) =>
-              this.createUser({ name: n, darkMode: true })
+              this.createUser({ name: n, darkMode: undefined })
             }
           />
         ) : (
@@ -63,9 +70,8 @@ export class App extends React.Component<{}, { user: UserProfile }> {
               <Route path="/event/:id" component={EventWrapper} />
               <Route path="/">
                 <EventCreator
+                  organizer={this.state.user.name}
                   onSubmit={this.createEvent}
-                  // @ts-ignore
-                  event={{ organizer: this.state.user.name }}
                 />
               </Route>
             </Switch>

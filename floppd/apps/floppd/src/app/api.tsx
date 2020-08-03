@@ -1,5 +1,4 @@
 export function api<T>(url: string, method: string, body?: T): Promise<T> {
-  console.log(url);
   return fetch(url, {
     method: method,
     headers: body

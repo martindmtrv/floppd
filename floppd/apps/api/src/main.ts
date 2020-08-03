@@ -21,6 +21,12 @@ app.use(
     }),
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      path: '/',
+      httpOnly: true,
+      secure: false,
+      maxAge: 99999999999,
+    },
   })
 );
 
@@ -62,6 +68,18 @@ app.get('/api/who', (req, res) => {
   }
 });
 
+app.post('/api/who/dark', (req, res) => {
+  if (req.session.name) {
+    req.session.darkMode = req.body.darkMode;
+    res.status(200).json({
+      name: req.session.name,
+      darkMode: req.session.darkMode,
+    });
+  } else {
+    res.status(404).json({ msg: 'No user associated yet' });
+  }
+});
+
 app.post('/api/who', (req, res) => {
   if (req.body.name && req.body.name != '') {
     req.session.name = req.body.name;
@@ -80,6 +98,31 @@ app.get('/api/event/:id', (req, res) => {
       res.status(404).json({ msg: `Event ${req.params.id} is not found` });
       return;
     }
-    res.status(200).json(event);
+    res.status(200).json({
+      ...event._doc,
+      responded: event.hasAnswered.includes(req.session.id),
+    });
+  });
+});
+
+app.post('/api/event/:id', (req, res) => {
+  if (!req.session.name) {
+    res.status(404).json({ msg: 'No user associated yet' });
+    return;
+  }
+
+  Event.findById(req.params.id, (err, event) => {
+    if (err || event === null) {
+      res.status(404).json({ msg: `Event ${req.params.id} is not found` });
+      return;
+    }
+    event.hasAnswered.push(req.session.id);
+    req.body.going
+      ? event.attending.push(req.session.name)
+      : event.flopping.push(req.session.name);
+
+    event.save(() => {
+      res.status(200).json(event);
+    });
   });
 });

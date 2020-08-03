@@ -7,17 +7,25 @@ export class EventWrapper extends React.Component<
   {
     match: { params: { id: string } };
   },
-  { event: IEventApi | Error }
+  { event: IEventApi | Error; responded: boolean }
 > {
   constructor(props) {
     super(props);
     this.state = {
       event: undefined,
+      responded: undefined,
     };
   }
 
   getEvent = (id: string): Promise<IEventApi> =>
     api<IEventApi>(`/api/event/${id}`, 'GET');
+
+  setResponse = (b: boolean): Promise<void> =>
+    api<IEventApi>(`/api/event/${this.props.match.params.id}`, 'POST', ({
+      going: b,
+    } as unknown) as IEventApi).then((event) =>
+      this.setState({ event: event, responded: true })
+    );
 
   componentDidMount() {
     const {
@@ -27,24 +35,20 @@ export class EventWrapper extends React.Component<
     } = this.props;
 
     this.getEvent(id).then((event) => {
-      this.setState({ event: event });
+      this.setState({ event: event as IEventApi, responded: event.responded });
     });
   }
 
   render() {
     const isError: boolean = this.state.event && 'msg' in this.state.event;
-    const responded: boolean =
-      !isError &&
-      (this.state.event as IEventApi)?.hasAnswered.includes(
-        localStorage.getItem('user')
-      );
+
     return isError ? (
       <ErrorComponent msg={(this.state.event as Error).msg} />
     ) : (
       <Event
         event={this.state.event as IEvent}
-        onSubmit={(b: boolean) => null}
-        responded={responded}
+        onSubmit={(b: boolean) => this.setResponse(b)}
+        responded={this.state.responded}
       />
     );
   }

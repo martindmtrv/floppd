@@ -73,9 +73,6 @@ export class NamePicker extends React.Component<
           />
         </DialogContent>
         <DialogActions>
-          <IconButton>
-            <SettingsBrightness />
-          </IconButton>
           <Button onClick={this.onSubmit} color="primary">
             Continue
           </Button>

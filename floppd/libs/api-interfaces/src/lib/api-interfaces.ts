@@ -7,6 +7,7 @@ export interface IEventApi {
   hasAnswered: string[];
   attending: string[];
   flopping: string[];
+  responded: boolean;
   __v: number;
   _id: string;
 }
