@@ -1,12 +1,12 @@
 import React from 'react';
 
 import {
-  Container,
   Typography,
   Grid,
   Paper,
   createMuiTheme,
   ThemeProvider,
+  Link,
 } from '@material-ui/core';
 
 import Confetti from '../../../assets/Confetti-4s-1920px.svg';
@@ -45,6 +45,7 @@ export class Page extends React.Component<IPageProps, {}> {
               this.props.darkMode ? ConfettiDark : Confetti
             }) center/cover`,
             height: '100%',
+            maxHeight: '100%',
           }}
         >
           <DarkmodeTrigger
@@ -60,11 +61,13 @@ export class Page extends React.Component<IPageProps, {}> {
             spacing={4}
             alignItems="center"
             direction="column"
-            style={{ margin: 0, width: '100%' }}
+            style={{ width: '100%', padding: 16, margin: 0 }}
           >
             <Grid item>
               <Paper style={{ boxShadow: 'unset', backgroundColor: 'unset' }}>
-                <Typography variant="h4">floppd</Typography>
+                <Link href="/" underline="none" color="textPrimary">
+                  <Typography variant="h4">floppd</Typography>
+                </Link>
               </Paper>
             </Grid>
             {children}

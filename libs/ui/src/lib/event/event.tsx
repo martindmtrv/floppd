@@ -66,7 +66,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
       location,
       description,
     } = this.props.event;
-    let date = new Date(this.props.event.date);
+    const date = new Date(this.props.event.date);
     return (
       <Paper>
         <div className="event">
@@ -76,10 +76,17 @@ export class Event extends React.Component<IEventProps, IEventState> {
             alignItems="center"
             direction="column"
             spacing={4}
-            style={{ minWidth: 300 }}
+            style={{ width: 300 }}
           >
-            <Grid item>
-              <Typography variant="h5">{title}</Typography>
+            <Grid
+              item
+              style={{
+                maxWidth: 250,
+              }}
+            >
+              <Typography variant="h5" noWrap>
+                {title}
+              </Typography>
             </Grid>
             <Grid item>
               <List>
@@ -192,7 +199,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
                   justify="space-evenly"
                   direction="column"
                 >
-                  <Grid item>
+                  <Grid item style={{ width: 250 }}>
                     <List>
                       <ListItem
                         button
@@ -205,7 +212,12 @@ export class Event extends React.Component<IEventProps, IEventState> {
                         <ListItemIcon>
                           <CheckCircle />
                         </ListItemIcon>
-                        <ListItemText primary={`${attending.length} Going`} />
+                        <ListItemText
+                          primary={`${attending.length} Going`}
+                          primaryTypographyProps={{
+                            noWrap: true,
+                          }}
+                        />
                         {this.state.attendingOpen ? (
                           <ExpandLess />
                         ) : (
@@ -243,7 +255,12 @@ export class Event extends React.Component<IEventProps, IEventState> {
                         <ListItemIcon>
                           <HighlightOff />
                         </ListItemIcon>
-                        <ListItemText primary={`${flopping.length} Flopping`} />
+                        <ListItemText
+                          primary={`${flopping.length} Flopping`}
+                          primaryTypographyProps={{
+                            noWrap: true,
+                          }}
+                        />
                         {this.state.floppingOpen ? (
                           <ExpandLess />
                         ) : (
