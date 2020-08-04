@@ -2,11 +2,13 @@
   "name": "floppd",
   "version": "0.0.0",
   "license": "MIT",
+  "engines": {
+    "node": "12.18.3"
+  },
   "scripts": {
     "nx": "nx",
-    "start": "nx serve",
+    "start": "node dist/apps/api/main",
     "storybook": "nx run ui:storybook",
-    "build": "nx build",
     "test": "nx test",
     "lint": "nx workspace-lint && nx lint",
     "e2e": "nx e2e",

@@ -1,6 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const path = require('path');
 
 import Event from './models/EventModel';
 
@@ -9,6 +10,8 @@ import db from './app/db';
 const app = express();
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '..', 'floppd')));
 
 app.use(
   session({
@@ -30,7 +33,7 @@ app.use(
   })
 );
 
-const port = process.env.port || 3333;
+const port = process.env.PORT || 3333;
 db.connect(() => {
   const server = app.listen(port, () => {
     console.log('Listening at http://localhost:' + port + '/api');

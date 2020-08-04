@@ -125,10 +125,11 @@ export class EventCreator extends React.Component<
             spacing={4}
             alignItems="center"
             direction="column"
-            style={{ minWidth: 500 }}
+            style={{ minWidth: 300 }}
           >
             <Grid item>
               <Grid
+                style={{ padding: 32 }}
                 container
                 alignItems="center"
                 direction="column"

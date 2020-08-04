@@ -76,7 +76,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
             alignItems="center"
             direction="column"
             spacing={4}
-            style={{ minWidth: 500 }}
+            style={{ minWidth: 300 }}
           >
             <Grid item>
               <Typography variant="h5">{title}</Typography>
@@ -186,7 +186,12 @@ export class Event extends React.Component<IEventProps, IEventState> {
               </Button>
             ) : (
               <Grid item>
-                <Grid container spacing={4} justify="space-evenly">
+                <Grid
+                  container
+                  spacing={4}
+                  justify="space-evenly"
+                  direction="column"
+                >
                   <Grid item>
                     <List>
                       <ListItem
@@ -220,7 +225,11 @@ export class Event extends React.Component<IEventProps, IEventState> {
                       </Collapse>
                     </List>
                   </Grid>
-                  <Divider flexItem orientation="vertical" />
+                  <Divider
+                    flexItem
+                    orientation="horizontal"
+                    style={{ height: 2 }}
+                  />
                   <Grid item>
                     <List>
                       <ListItem
