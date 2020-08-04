@@ -199,7 +199,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
                   justify="space-evenly"
                   direction="column"
                 >
-                  <Grid item>
+                  <Grid item style={{ width: 250 }}>
                     <List>
                       <ListItem
                         button
@@ -212,7 +212,12 @@ export class Event extends React.Component<IEventProps, IEventState> {
                         <ListItemIcon>
                           <CheckCircle />
                         </ListItemIcon>
-                        <ListItemText primary={`${attending.length} Going`} />
+                        <ListItemText
+                          primary={`${attending.length} Going`}
+                          primaryTypographyProps={{
+                            noWrap: true,
+                          }}
+                        />
                         {this.state.attendingOpen ? (
                           <ExpandLess />
                         ) : (
@@ -250,7 +255,12 @@ export class Event extends React.Component<IEventProps, IEventState> {
                         <ListItemIcon>
                           <HighlightOff />
                         </ListItemIcon>
-                        <ListItemText primary={`${flopping.length} Flopping`} />
+                        <ListItemText
+                          primary={`${flopping.length} Flopping`}
+                          primaryTypographyProps={{
+                            noWrap: true,
+                          }}
+                        />
                         {this.state.floppingOpen ? (
                           <ExpandLess />
                         ) : (
