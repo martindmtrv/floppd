@@ -66,7 +66,7 @@ export class Event extends React.Component<IEventProps, IEventState> {
       location,
       description,
     } = this.props.event;
-    let date = new Date(this.props.event.date);
+    const date = new Date(this.props.event.date);
     return (
       <Paper>
         <div className="event">
@@ -76,10 +76,17 @@ export class Event extends React.Component<IEventProps, IEventState> {
             alignItems="center"
             direction="column"
             spacing={4}
-            style={{ minWidth: 300 }}
+            style={{ width: 300 }}
           >
-            <Grid item>
-              <Typography variant="h5">{title}</Typography>
+            <Grid
+              item
+              style={{
+                maxWidth: 250,
+              }}
+            >
+              <Typography variant="h5" noWrap>
+                {title}
+              </Typography>
             </Grid>
             <Grid item>
               <List>
